@@ -1,0 +1,21 @@
+{
+  "name": "ug",
+  "version": "0.0.0",
+  "description": "UnitGraph - Graph Library for nodejs",
+  "author": "Keith Horwood",
+  "main": "module.js",
+  "engines": {
+    "iojs": "2.2.1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "~2.3.0",
+    "mocha": "~2.2.4"
+  },
+  "scripts": {
+    "test": "mocha ./test/runner.js --harmony_classes",
+    "check": "node ./test/check.js --harmony_classes"
+  },
+  "author": "Keith Horwood",
+  "license": "MIT"
+}
