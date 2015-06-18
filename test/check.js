@@ -46,3 +46,9 @@ console.log(
     graph.nodes('house').find(3)
   ).prettify()
 )
+
+console.log('Closest:');
+
+graph.closest(graph.nodes('person').find(1), 'house', 5).map(function(v) {
+  console.log(v.distance(), v.end().toString());
+});
