@@ -64,3 +64,13 @@ console.log('Closest:');
 graph.closest(graph.nodes('node').find('A')).map(function(v) {
   console.log(v.distance(), v.end().toString());
 });
+
+// Can load from serialized ?
+
+console.log('Serialize and re-run query');
+
+graph.load(graph.serialize());
+
+graph.closest(graph.nodes('node').find('A')).map(function(v) {
+  console.log(v.distance(), v.end().toString());
+});
