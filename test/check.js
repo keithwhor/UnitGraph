@@ -4,51 +4,63 @@ const UG = require('../module.js');
 
 let graph = new UG.Graph();
 
-graph.nodes('person').createIndex('id');
-graph.nodes('house').createIndex('id');
+graph.nodes('node').createIndex('name');
 
-graph.createNode('person', {name: 'Tim', id: 1});
-graph.createNode('person', {name: 'Dave', id: 2});
-graph.createNode('person', {name: 'John', id: 3});
+graph.createNode('node', {name: 'A'});
+graph.createNode('node', {name: 'B'});
+graph.createNode('node', {name: 'C'});
+graph.createNode('node', {name: 'D'});
+graph.createNode('node', {name: 'E'});
+graph.createNode('node', {name: 'F'});
 
-graph.createNode('house', {color: 'Red', id: 1});
-graph.createNode('house', {color: 'Green', id: 2});
-graph.createNode('house', {color: 'Blue', id: 3});
+graph.createNode('node', {name: 'Z'});
+graph.createNode('node', {name: 'Y'});
 
-graph.createEdge('owns').link(
-  graph.nodes('person').find(1),
-  graph.nodes('house').find(1)
-);
+graph.createEdge('edge').link(
+  graph.nodes('node').find('A'),
+  graph.nodes('node').find('Z')
+).setDistance(1);
 
-graph.createEdge('lived_at').link(
-  graph.nodes('person').find(2),
-  graph.nodes('house').find(1)
-);
+graph.createEdge('edge').link(
+  graph.nodes('node').find('C'),
+  graph.nodes('node').find('Y')
+).setDistance(0.5);
 
-graph.createEdge('owns').link(
-  graph.nodes('person').find(2),
-  graph.nodes('house').find(2)
-);
+graph.createEdge('edge').link(
+  graph.nodes('node').find('A'),
+  graph.nodes('node').find('B')
+).setDistance(3);
 
-graph.createEdge('lived_at').link(
-  graph.nodes('person').find(3),
-  graph.nodes('house').find(3)
-);
+graph.createEdge('edge').link(
+  graph.nodes('node').find('A'),
+  graph.nodes('node').find('C')
+).setDistance(1);
 
-graph.createEdge('owns').link(
-  graph.nodes('person').find(3),
-  graph.nodes('house').find(2)
-);
+graph.createEdge('edge').link(
+  graph.nodes('node').find('A'),
+  graph.nodes('node').find('D')
+).setDistance(1);
+
+graph.createEdge('edge').link(
+  graph.nodes('node').find('A'),
+  graph.nodes('node').find('E')
+).setDistance(5);
+
+graph.createEdge('edge').link(
+  graph.nodes('node').find('C'),
+  graph.nodes('node').find('F')
+).setDistance(1);
+
 
 console.log(
   graph.trace(
-    graph.nodes('person').find(1),
-    graph.nodes('house').find(3)
+    graph.nodes('node').find('A'),
+    graph.nodes('node').find('E')
   ).prettify()
 )
 
 console.log('Closest:');
 
-graph.closest(graph.nodes('person').find(1), 'house', 5).map(function(v) {
+graph.closest(graph.nodes('node').find('A')).map(function(v) {
   console.log(v.distance(), v.end().toString());
 });
