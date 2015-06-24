@@ -69,7 +69,7 @@ graph.closest(graph.nodes('node').find('A')).map(function(v) {
 
 console.log('Serialize and re-run query');
 
-graph.load(graph.serialize());
+graph.fromJSON(graph.toJSON());
 
 graph.closest(graph.nodes('node').find('A')).map(function(v) {
   console.log(v.distance(), v.end().toString());
