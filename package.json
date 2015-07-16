@@ -1,6 +1,6 @@
 {
   "name": "ug",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "UnitGraph - Graph Library for nodejs",
   "author": "Keith Horwood",
   "main": "module.js",

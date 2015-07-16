@@ -74,3 +74,7 @@ graph.fromJSON(graph.toJSON());
 graph.closest(graph.nodes('node').find('A')).map(function(v) {
   console.log(v.distance(), v.end().toString());
 });
+
+console.log('get');
+
+console.log(graph.nodes('node').find('A').get('name'));
