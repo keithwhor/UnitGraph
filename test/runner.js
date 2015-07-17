@@ -128,12 +128,22 @@ describe('Test Suite', function() {
 
       let graph = new UG.Graph();
       graph.createNode('testNode', {id: 1, hello: 'world'});
-      graph.createEdge('testEdge', {id: 1, hello: 'world'});
+      graph.createNode('testNode', {id: 2, hello: 'earth'});
+      graph.createEdge('testEdge', {id: 1, message: 'hello'});
 
       let n = graph._nodes[0];
+      let n2 = graph._nodes[1];
       let e = graph._edges[0];
 
       describe('Node', function() {
+
+        it('should have expected node properties', function() {
+
+          expect(n.edges).to.be.an('array');
+          expect(n.inputEdges).to.be.an('array');
+          expect(n.outputEdges).to.be.an('array');
+
+        });
 
         it('should be able to set a property', function() {
 
@@ -162,6 +172,67 @@ describe('Test Suite', function() {
         it('should return undefined for get of unset property', function() {
 
           expect(n.get('a')).to.be.undefined;
+
+        });
+
+      });
+
+      describe('Edge', function() {
+
+        it('should have expected edge properties', function() {
+
+          expect(e).to.have.ownProperty('inputNode');
+          expect(e).to.have.ownProperty('outputNode');
+          expect(e).to.have.ownProperty('duplex');
+          expect(e).to.have.ownProperty('distance');
+
+        });
+
+        it('should link two nodes directionally', function() {
+
+          e.link(n, n2);
+
+          expect(n.inputEdges.indexOf(e)).to.equal(-1);
+          expect(n.outputEdges.indexOf(e)).to.be.at.least(0);
+          expect(n2.inputEdges.indexOf(e)).to.be.at.least(0);
+          expect(n2.outputEdges.indexOf(e)).to.equal(-1);
+
+          expect(e.inputNode).to.equal(n);
+          expect(e.outputNode).to.equal(n2);
+
+          expect(e.duplex).to.equal(false);
+
+        });
+
+        it('should link two nodes bidirectionally', function() {
+
+          e.link(n, n2, true);
+
+          expect(n.inputEdges.indexOf(e)).to.be.at.least(0);
+          expect(n.outputEdges.indexOf(e)).to.be.at.least(0);
+          expect(n2.inputEdges.indexOf(e)).to.be.at.least(0);
+          expect(n2.outputEdges.indexOf(e)).to.be.at.least(0);
+
+          expect(e.inputNode).to.equal(n);
+          expect(e.outputNode).to.equal(n2);
+
+          expect(e.duplex).to.equal(true);
+
+        });
+
+        it('should unlink nodes', function() {
+
+          e.unlink();
+
+          expect(n.inputEdges.indexOf(e)).to.equal(-1);
+          expect(n.outputEdges.indexOf(e)).to.equal(-1);
+          expect(n2.inputEdges.indexOf(e)).to.equal(-1);
+          expect(n2.outputEdges.indexOf(e)).to.equal(-1);
+
+          expect(e.inputNode).to.be.null;
+          expect(e.outputNode).to.be.null;
+
+          expect(e.duplex).to.equal(false);
 
         });
 
