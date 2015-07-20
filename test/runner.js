@@ -403,6 +403,199 @@ describe('Test Suite', function() {
 
       });
 
+    });
+
+    describe('Traversal', function() {
+
+      let graph = new UG.Graph();
+
+      graph.nodes('person').createIndex('id');
+      graph.nodes('food').createIndex('id');
+
+      graph.createNode('person', {id: 1, name: 'Keith'});
+      graph.createNode('person', {id: 2, name: 'Scott'});
+      graph.createNode('person', {id: 3, name: 'Jules'});
+      graph.createNode('person', {id: 4, name: 'Kelly'});
+      graph.createNode('person', {id: 5, name: 'Trevor'});
+      graph.createNode('person', {id: 6, name: 'Arthur'});
+
+      graph.createNode('food', {id: 1, name: 'Pizza'});
+      graph.createNode('food', {id: 2, name: 'Kale'});
+      graph.createNode('food', {id: 3, name: 'Ice Cream'});
+      graph.createNode('food', {id: 4, name: 'Meatballs'});
+
+      graph.createEdge('likes').link(graph.nodes('person').find(1), graph.nodes('food').find(1));
+      graph.createEdge('likes').link(graph.nodes('person').find(1), graph.nodes('food').find(4));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(2), graph.nodes('food').find(1));
+      //graph.createEdge('likes').link(graph.nodes('person').find(2), graph.nodes('food').find(3));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(3), graph.nodes('food').find(2));
+      graph.createEdge('likes').link(graph.nodes('person').find(3), graph.nodes('food').find(3));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(4), graph.nodes('food').find(1));
+      // graph.createEdge('likes').link(graph.nodes('person').find(4), graph.nodes('food').find(2));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(5), graph.nodes('food').find(2));
+      graph.createEdge('likes').link(graph.nodes('person').find(5), graph.nodes('food').find(4));
+
+      // graph.createEdge('likes').link(graph.nodes('person').find(6), graph.nodes('food').find(3));
+      graph.createEdge('likes').link(graph.nodes('person').find(6), graph.nodes('food').find(4));
+
+      describe('Graph#trace', function() {
+
+        let nodes = [
+          graph.nodes('person').find(1),
+          graph.nodes('food').find(4),
+          graph.nodes('person').find(5),
+          graph.nodes('food').find(2),
+          graph.nodes('person').find(3)
+        ];
+
+        let path = graph.trace(graph.nodes('person').find(1), graph.nodes('person').find(3));
+
+        it('should have the correct starting point', function() {
+
+          expect(path.start()).to.equal(nodes[0]);
+
+        });
+
+        it('should have the correct ending point', function() {
+
+          expect(path.end()).to.equal(nodes[4]);
+
+        });
+
+        it('should have the correct length', function() {
+
+          expect(path.length()).to.equal(4);
+
+        });
+
+        it('should have the correct distance', function() {
+
+          expect(path.distance()).to.equal(4);
+
+        });
+
+      });
+
+      describe('Graph#closest', function() {
+
+        let paths = graph.closest(graph.nodes('person').find(2), {
+          compare: function() { return true; },
+          count: 0,
+          direction: 0,
+          minDepth: 0,
+          maxDepth: 0
+        });
+
+        it('should find itself first', function() {
+
+          expect(paths[0].end()).to.equal(graph.nodes('person').find(2));
+
+        });
+
+        it('should find its first adjacent node next', function() {
+
+          expect(paths[1].end()).to.equal(graph.nodes('food').find(1));
+
+        });
+
+        it('should have the nodes adjacent to 1st adjacent node as the next entries (any order)', function() {
+
+          let cnodes = [
+            graph.nodes('person').find(1),
+            graph.nodes('person').find(4)
+          ];
+
+          expect(cnodes.indexOf(paths[2].end())).to.be.above(-1);
+          expect(cnodes.indexOf(paths[3].end())).to.be.above(-1);
+
+        });
+
+        it('should obey the compare function', function() {
+
+          let paths = graph.closest(graph.nodes('person').find(2), {
+            compare: function(node) { return node.entity === 'person'; },
+            count: 0,
+            direction: 0,
+            minDepth: 0,
+            maxDepth: 0
+          });
+
+          expect(paths[0].end()).to.equal(graph.nodes('person').find(2));
+
+          let cnodes = [
+            graph.nodes('person').find(1),
+            graph.nodes('person').find(4)
+          ];
+
+          expect(cnodes.indexOf(paths[1].end())).to.be.above(-1);
+          expect(cnodes.indexOf(paths[2].end())).to.be.above(-1);
+
+        });
+
+        it('should obey the count attribute', function() {
+
+          let paths = graph.closest(graph.nodes('person').find(2), {
+            compare: function() { return true; },
+            count: 2,
+            direction: 0,
+            minDepth: 0,
+            maxDepth: 0
+          });
+
+          expect(paths.length).to.equal(2);
+
+        });
+
+        it('should obey the direction attribute', function() {
+
+          let paths = graph.closest(graph.nodes('person').find(2), {
+            compare: function() { return true; },
+            count: 0,
+            direction: 1,
+            minDepth: 0,
+            maxDepth: 0
+          });
+
+          expect(paths.length).to.equal(2);
+          expect(paths[1].end()).to.equal(graph.nodes('food').find(1));
+
+        });
+
+        it('should obey the minDepth attribute', function() {
+
+          let paths = graph.closest(graph.nodes('person').find(2), {
+            compare: function() { return true; },
+            count: 0,
+            direction: 0,
+            minDepth: 1,
+            maxDepth: 0
+          });
+
+          expect(paths[0].end()).to.equal(graph.nodes('food').find(1));
+
+        });
+
+        it('should obey the maxDepth attribute', function() {
+
+          let paths = graph.closest(graph.nodes('person').find(2), {
+            compare: function() { return true; },
+            count: 0,
+            direction: 0,
+            minDepth: 0,
+            maxDepth: 1
+          });
+
+          expect(paths.length).to.equal(2);
+          expect(paths[0].end()).to.equal(graph.nodes('person').find(2));
+          expect(paths[1].end()).to.equal(graph.nodes('food').find(1));
+
+        });
+
+      });
 
     });
 
