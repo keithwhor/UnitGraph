@@ -299,6 +299,110 @@ describe('Test Suite', function() {
       graph.createEdge('likes').link(graph.nodes('person').find(6), graph.nodes('food').find(3));
       graph.createEdge('likes').link(graph.nodes('person').find(6), graph.nodes('food').find(4));
 
+      let nc = graph.nodes('person');
+
+      it('should get the first item', function() {
+
+        expect(nc.query().first()).to.equal(nc.find(1));
+
+      });
+
+      it('should get the last item', function() {
+
+        expect(nc.query().last()).to.equal(nc.find(6));
+
+      });
+
+      it('should return an array of units', function() {
+
+        expect(nc.query().units()).to.be.an('array');
+        expect(nc.query().units().length).to.equal(6);
+
+      });
+
+      describe('Filters', function () {
+
+        it('should filter is', function() {
+
+          expect(nc.query().filter({name__is: 'Keith'}).first()).to.equal(nc.find(1));
+
+        });
+
+        it('should filter not', function() {
+
+          expect(nc.query().filter({name__not: 'Keith'}).first()).to.equal(nc.find(2));
+          expect(nc.query().filter({name__not: 'Keith'}).units().length).to.equal(5);
+
+        });
+
+        it('should filter gt', function() {
+
+          expect(nc.query().filter({id__gt: 1}).first()).to.equal(nc.find(2));
+          expect(nc.query().filter({id__gt: 1}).units().length).to.equal(5);
+
+        });
+
+        it('should filter lt', function() {
+
+          expect(nc.query().filter({id__lt: 6}).last()).to.equal(nc.find(5));
+          expect(nc.query().filter({id__lt: 6}).units().length).to.equal(5);
+
+        });
+
+        it('should filter gte', function() {
+
+          expect(nc.query().filter({id__gte: 2}).first()).to.equal(nc.find(2));
+          expect(nc.query().filter({id__gte: 2}).units().length).to.equal(5);
+
+        });
+
+        it('should filter lte', function() {
+
+          expect(nc.query().filter({id__lte: 5}).last()).to.equal(nc.find(5));
+          expect(nc.query().filter({id__lte: 5}).units().length).to.equal(5);
+
+        });
+
+        it('should filter ilike', function() {
+
+          expect(nc.query().filter({name__ilike: 'eit'}).first()).to.equal(nc.find(1));
+          expect(nc.query().filter({name__ilike: 'eit'}).units().length).to.equal(1);
+
+        });
+
+        it('should filter like', function() {
+
+          expect(nc.query().filter({name__like: 'Jul'}).first()).to.equal(nc.find(3));
+          expect(nc.query().filter({name__like: 'Jul'}).units().length).to.equal(1);
+
+          expect(nc.query().filter({name__like: 'jul'}).first()).to.be.undefined;
+          expect(nc.query().filter({name__like: 'jul'}).units().length).to.equal(0);
+
+        });
+
+        it('should filter in', function() {
+
+          expect(nc.query().filter({name__in: ['Keith', 'Scott']}).first()).to.equal(nc.find(1));
+          expect(nc.query().filter({name__in: ['Keith', 'Scott']}).units().length).to.equal(2);
+
+        });
+
+        it('should filter not_in', function() {
+
+          expect(nc.query().filter({name__not_in: ['Keith', 'Scott']}).first()).to.equal(nc.find(3));
+          expect(nc.query().filter({name__not_in: ['Keith', 'Scott']}).units().length).to.equal(4);
+
+        });
+
+        it('should exclude as expected', function() {
+
+          expect(nc.query().exclude({name__is: 'Keith'}).first()).to.equal(nc.find(2));
+          expect(nc.query().exclude({name__is: 'Keith'}).units().length).to.equal(5);
+
+        });
+
+      });
+
 
     });
 
