@@ -1,5 +1,7 @@
 # UnitGraph
 
+[![Build Status](https://travis-ci.org/keithwhor/UnitGraph.svg?branch=master)](https://travis-ci.org/keithwhor/UnitGraph)
+
 UnitGraph is a simple Graph traversal library for io.js. It is intended for
 quick, synchronous in-memory traversals including route tracing and finding
 closest nodes to a target.
