@@ -16,6 +16,10 @@
     "test": "mocha ./test/runner.js --harmony_classes",
     "check": "node ./test/check.js --harmony_classes"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keithwhor/UnitGraph.git"
+  },
   "author": "Keith Horwood",
   "license": "MIT"
 }
