@@ -74,7 +74,7 @@ describe('Test Suite', function() {
 
         let node = graph._nodes[0];
 
-        expect(graph.find(node.__uniqid__)).to.equal(node);
+        expect(graph.unit(node.__uniqid__)).to.equal(node);
 
       });
 
