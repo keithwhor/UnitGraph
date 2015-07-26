@@ -18,8 +18,7 @@ To use the package. :)
 
 ## Examples
 
-### Find all nodes of type 'person' with name matching 'ea'
-
+### Find all nodes of type 'person' with name matching 'ae'
 ```javascript
 let ug = require('ug');
 let graph = new ug.Graph();
