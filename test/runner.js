@@ -599,6 +599,98 @@ describe('Test Suite', function() {
 
     });
 
+    describe('Saving', function() {
+
+      let graph = new UG.Graph();
+
+      graph.nodes('person').createIndex('id');
+      graph.nodes('food').createIndex('id');
+
+      graph.createNode('person', {id: 1, name: 'Keith'});
+      graph.createNode('person', {id: 2, name: 'Scott'});
+      graph.createNode('person', {id: 3, name: 'Jules'});
+      graph.createNode('person', {id: 4, name: 'Kelly'});
+      graph.createNode('person', {id: 5, name: 'Trevor'});
+      graph.createNode('person', {id: 6, name: 'Arthur'});
+
+      graph.createNode('food', {id: 1, name: 'Pizza'});
+      graph.createNode('food', {id: 2, name: 'Kale'});
+      graph.createNode('food', {id: 3, name: 'Ice Cream'});
+      graph.createNode('food', {id: 4, name: 'Meatballs'});
+
+      graph.createEdge('likes').link(graph.nodes('person').find(1), graph.nodes('food').find(1));
+      graph.createEdge('likes').link(graph.nodes('person').find(1), graph.nodes('food').find(4));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(2), graph.nodes('food').find(1));
+      graph.createEdge('likes').link(graph.nodes('person').find(2), graph.nodes('food').find(3));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(3), graph.nodes('food').find(2));
+      graph.createEdge('likes').link(graph.nodes('person').find(3), graph.nodes('food').find(3));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(4), graph.nodes('food').find(1));
+      graph.createEdge('likes').link(graph.nodes('person').find(4), graph.nodes('food').find(2));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(5), graph.nodes('food').find(2));
+      graph.createEdge('likes').link(graph.nodes('person').find(5), graph.nodes('food').find(4));
+
+      graph.createEdge('likes').link(graph.nodes('person').find(6), graph.nodes('food').find(3));
+      graph.createEdge('likes').link(graph.nodes('person').find(6), graph.nodes('food').find(4));
+
+      let gzipGraph = null;
+
+      it('should gzip the graph', function(done) {
+
+        graph.gzip(function(err, result) {
+
+          expect(err).to.equal(null);
+          gzipGraph = result.toString('binary');
+          done();
+
+        });
+
+      });
+
+      it('should gunzip the graph', function(done) {
+
+        let newGraph = new UG.Graph();
+
+        newGraph.gunzip(gzipGraph, function(err) {
+
+          expect(err).to.equal(null);
+          expect(newGraph.nodes('person').find(1).get('name')).to.equal('Keith');
+          done();
+
+        });
+
+      });
+
+      it('should save the graph', function(done) {
+
+        graph.save('.graphtmp', function(err) {
+
+          expect(err).to.equal(null);
+          done();
+
+        });
+
+      });
+
+      it('should load the graph', function(done) {
+
+        let newGraph = new UG.Graph();
+
+        newGraph.load('.graphtmp', function(err) {
+
+          expect(err).to.equal(null);
+          expect(newGraph.nodes('person').find(1).get('name')).to.equal('Keith');
+          done();
+
+        });
+
+      });
+
+    });
+
   });
 
 });

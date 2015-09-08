@@ -1,6 +1,6 @@
 {
   "name": "ug",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "UnitGraph - Lightweight Graph Library for iojs",
   "author": "Keith Horwood",
   "main": "module.js",
