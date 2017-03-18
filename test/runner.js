@@ -595,6 +595,23 @@ describe('Test Suite', function() {
 
         });
 
+        it('should obey the maxDepth attribute by length', function() {
+
+          let paths = graph.closest(graph.nodes('person').find(2), {
+            compare: function() { return true; },
+            count: 0,
+            direction: 0,
+            minDepth: 0,
+            maxDepth: 1,
+            byLength: true
+          });
+
+          expect(paths.length).to.equal(2);
+          expect(paths[0].end()).to.equal(graph.nodes('person').find(2));
+          expect(paths[1].end()).to.equal(graph.nodes('food').find(1));
+
+        });
+
       });
 
     });
