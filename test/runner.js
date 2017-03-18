@@ -492,6 +492,88 @@ describe('Test Suite', function() {
 
       });
 
+      describe('Graph#traceObjOpts', function() {
+
+        let nodes = [
+          graph.nodes('person').find(1),
+          graph.nodes('food').find(4),
+          graph.nodes('person').find(5),
+          graph.nodes('food').find(2),
+          graph.nodes('person').find(3)
+        ];
+
+        const opts = {}
+
+        let path = graph.trace(graph.nodes('person').find(1), graph.nodes('person').find(3), opts);
+
+        it('should have the correct starting point', function() {
+
+          expect(path.start()).to.equal(nodes[0]);
+
+        });
+
+        it('should have the correct ending point', function() {
+
+          expect(path.end()).to.equal(nodes[4]);
+
+        });
+
+        it('should have the correct length', function() {
+
+          expect(path.length()).to.equal(4);
+
+        });
+
+        it('should have the correct distance', function() {
+
+          expect(path.distance()).to.equal(4);
+
+        });
+
+      });
+
+      describe('Graph#traceObjOptsDir', function() {
+
+        let nodes = [
+          graph.nodes('person').find(1),
+          graph.nodes('food').find(4),
+          graph.nodes('person').find(5),
+          graph.nodes('food').find(2),
+          graph.nodes('person').find(3)
+        ];
+
+        const opts = {
+          direction: 1
+        }
+
+        let path = graph.trace(graph.nodes('person').find(1), graph.nodes('person').find(3), opts);
+
+        it('should have the correct starting point', function() {
+
+          expect(path.length()).to.be.equal(0);
+
+        });
+
+        it('should have the correct ending point', function() {
+
+          expect(path.length()).to.be.equal(0);
+
+        });
+
+        it('should have the correct length', function() {
+
+          expect(path.length()).to.be.equal(0);
+
+        });
+
+        it('should have the correct distance', function() {
+
+          expect(path.length()).to.be.equal(0);
+
+        });
+
+      });
+
       describe('Graph#closest', function() {
 
         let paths = graph.closest(graph.nodes('person').find(2), {
