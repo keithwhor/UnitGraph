@@ -13,8 +13,8 @@
     "mocha": "~2.2.4"
   },
   "scripts": {
-    "test": "mocha ./test/runner.js --harmony_classes",
-    "check": "node ./test/check.js --harmony_classes"
+    "test": "mocha ./test/runner.js ",
+    "check": "node ./test/check.js "
   },
   "repository": {
     "type": "git",
