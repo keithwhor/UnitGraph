@@ -394,6 +394,28 @@ describe('Test Suite', function() {
 
         });
 
+        it('should filter starts_with', function() {
+
+          expect(nc.query().filter({name__starts_with: 'Keith'}).units().length).to.equal(1);
+          expect(nc.query().filter({name__starts_with: 'Keith'}).first()).to.equal(nc.find(1));
+
+          expect(nc.query().filter({name__starts_with: 'K'}).units().length).to.equal(2);
+          expect(nc.query().filter({name__starts_with: 'K'}).first()).to.equal(nc.find(1));
+          expect(nc.query().filter({name__starts_with: 'K'}).units()[1]).to.equal(nc.find(4));
+
+        });
+
+        it('should filter istarts_with', function() {
+
+          expect(nc.query().filter({name__istarts_with: 'keith'}).units().length).to.equal(1);
+          expect(nc.query().filter({name__istarts_with: 'keith'}).first()).to.equal(nc.find(1));
+
+          expect(nc.query().filter({name__istarts_with: 'k'}).units().length).to.equal(2);
+          expect(nc.query().filter({name__istarts_with: 'k'}).first()).to.equal(nc.find(1));
+          expect(nc.query().filter({name__istarts_with: 'k'}).units()[1]).to.equal(nc.find(4));
+
+        });
+
         it('should exclude as expected', function() {
 
           expect(nc.query().exclude({name__is: 'Keith'}).first()).to.equal(nc.find(2));
